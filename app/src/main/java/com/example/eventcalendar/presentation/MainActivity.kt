@@ -3,6 +3,7 @@ package com.example.eventcalendar.presentation
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.View
 import androidx.annotation.RequiresApi
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.GridLayoutManager
@@ -28,6 +29,13 @@ class MainActivity : AppCompatActivity() {
 
         initRecyclerView()
 
+        binding.btnNext.setOnClickListener(View.OnClickListener {
+            showNextWeek()
+        })
+
+        binding.btnPrev.setOnClickListener(View.OnClickListener {
+            showPrevWeek()
+        })
 
     }
 
@@ -40,6 +48,28 @@ class MainActivity : AppCompatActivity() {
         adapter = WeeklyCalendarAdapter()
         binding.calendarRecyclerView.adapter = adapter
         adapter.setList(days)
+
+    }
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    fun showNextWeek() {
+        CalendarUtils.selectedDate = CalendarUtils.selectedDate.plusWeeks(1)
+        binding.monthYearTV.text = monthYearFromDate(CalendarUtils.selectedDate)
+        val days: ArrayList<LocalDate> = daysInWeekList(CalendarUtils.selectedDate)
+        adapter.setList(days)
+        adapter.notifyDataSetChanged()
+
+
+    }
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    fun showPrevWeek() {
+        CalendarUtils.selectedDate = CalendarUtils.selectedDate.minusWeeks(1)
+        binding.monthYearTV.text = monthYearFromDate(CalendarUtils.selectedDate)
+        val days: ArrayList<LocalDate> = daysInWeekList(CalendarUtils.selectedDate)
+        adapter.setList(days)
+        adapter.notifyDataSetChanged()
+
 
     }
 }
