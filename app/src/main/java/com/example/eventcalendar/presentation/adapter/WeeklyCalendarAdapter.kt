@@ -47,7 +47,9 @@ class WeeklyCalendarAdapter() : RecyclerView.Adapter<MyViewHolder>() {
             if (date == null) {
                 binding.cellDayText.text = ""
             } else {
+                binding.dayOfWeekText.text = date.dayOfWeek.toString().subSequence(0,3)
                 binding.cellDayText.text = date.dayOfMonth.toString()
+
             }
 
         }

@@ -36,7 +36,7 @@ class MainActivity : AppCompatActivity() {
         binding.monthYearTV.text = monthYearFromDate(CalendarUtils.selectedDate)
         val days: ArrayList<LocalDate> = daysInWeekList(CalendarUtils.selectedDate)
 
-        binding.calendarRecyclerView.layoutManager = GridLayoutManager(applicationContext,7)
+        binding.calendarRecyclerView.layoutManager = GridLayoutManager(applicationContext,1,GridLayoutManager.HORIZONTAL,false)
         adapter = WeeklyCalendarAdapter()
         binding.calendarRecyclerView.adapter = adapter
         adapter.setList(days)
