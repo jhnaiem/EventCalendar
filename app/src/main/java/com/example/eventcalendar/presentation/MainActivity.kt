@@ -45,11 +45,19 @@ class MainActivity : AppCompatActivity() {
         val days: ArrayList<LocalDate> = daysInWeekList(CalendarUtils.selectedDate)
 
         binding.calendarRecyclerView.layoutManager = GridLayoutManager(applicationContext,1,GridLayoutManager.HORIZONTAL,false)
-        adapter = WeeklyCalendarAdapter()
+        adapter = WeeklyCalendarAdapter{ selectedItem: LocalDate ->
+            itemClicked(selectedItem)
+        }
         binding.calendarRecyclerView.adapter = adapter
         adapter.setList(days)
 
     }
+
+    private fun itemClicked(selectedItem: LocalDate) {
+        val addEventDialog: AddEventDialog = AddEventDialog()
+        addEventDialog.show(supportFragmentManager,"TAG")
+    }
+
 
     @RequiresApi(Build.VERSION_CODES.O)
     fun showNextWeek() {
