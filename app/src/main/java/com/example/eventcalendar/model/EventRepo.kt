@@ -1,5 +1,6 @@
 package com.example.eventcalendar.model
 
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import java.time.LocalDate
 
@@ -21,7 +22,7 @@ class EventRepo(private val dao: EventDao) {
         dao.deleteEvent(event)
     }
 
-    fun getEventsByDate(date: LocalDate): MutableLiveData<List<Event>> {
+    fun getEventsByDate(date: LocalDate): LiveData<List<Event>> {
         return dao.getEventsByDate(date)
     }
 }

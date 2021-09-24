@@ -18,8 +18,8 @@ interface EventDao {
     suspend fun deleteEvent(event: Event)
 
     @Query("SELECT * FROM event_data_table")
-    fun getAllEvents(): MutableLiveData<List<Event>>
+    fun getAllEvents(): LiveData<List<Event>>
 
-    @Query("SELECT * FROM event_data_table WHERE date IN (:date)")
-    fun getEventsByDate(date: LocalDate):MutableLiveData<List<Event>>
+    @Query("SELECT * FROM event_data_table WHERE event_date IN (:date)")
+    fun getEventsByDate(date: LocalDate):LiveData<List<Event>>
 }
