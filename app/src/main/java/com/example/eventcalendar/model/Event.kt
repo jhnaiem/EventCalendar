@@ -4,24 +4,28 @@ import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import java.time.LocalDate
-import java.time.LocalTime
+import java.time.LocalDateTime
 
 @Entity(tableName = "event_data_table")
 data class Event (
 
     @PrimaryKey(autoGenerate = true)
-    @ColumnInfo(name = "event_id")
+    @ColumnInfo(name = "id")
     var id: Int,
 
-    @ColumnInfo(name = "event_date")
+    @ColumnInfo(name = "date")
     var date: LocalDate,
 
-    @ColumnInfo(name = "event_time")
-    var time: LocalTime,
+    @ColumnInfo(name = "created_date_time")
+    var createdDateTime: LocalDateTime,
 
-    @ColumnInfo(name = "event_name")
+    @ColumnInfo(name = "updated_date_time")
+    var updatedDateTime: LocalDateTime,
+
+
+    @ColumnInfo(name = "title")
     var title: String,
 
-    @ColumnInfo(name = "event_desc")
+    @ColumnInfo(name = "description")
     var description: String
 )

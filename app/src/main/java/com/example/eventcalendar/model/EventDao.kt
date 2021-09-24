@@ -1,7 +1,9 @@
 package com.example.eventcalendar.model
 
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.room.*
+import java.time.LocalDate
 
 @Dao
 interface EventDao {
@@ -16,5 +18,8 @@ interface EventDao {
     suspend fun deleteEvent(event: Event)
 
     @Query("SELECT * FROM event_data_table")
-    fun getAllEvents(): LiveData<List<Event>>
+    fun getAllEvents(): MutableLiveData<List<Event>>
+
+    @Query("SELECT * FROM event_data_table WHERE date IN (:date)")
+    fun getEventsByDate(date: LocalDate):MutableLiveData<List<Event>>
 }
