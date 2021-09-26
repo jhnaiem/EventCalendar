@@ -3,8 +3,6 @@ package com.example.eventcalendar.model
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import androidx.room.TypeConverters
-import com.example.eventcalendar.presentation.utils.DateConverter
 import java.time.LocalDate
 import java.time.LocalDateTime
 
