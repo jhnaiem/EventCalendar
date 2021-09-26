@@ -64,10 +64,8 @@ class MainActivity : AppCompatActivity(), DialogButtonListener {
         binding.monthYearTV.text = monthYearFromDate(CalendarUtils.selectedDate)
         binding.calendarRecyclerView.layoutManager =
             GridLayoutManager(applicationContext, 1, GridLayoutManager.HORIZONTAL, false)
-        adapter =
-            WeeklyCalendarAdapter { selectedDate: LocalDate, clickToggle: Boolean, selectedEvent: Event
-                ->
-                addBtnOrItemClicked(selectedDate, clickToggle, selectedEvent)
+        adapter = WeeklyCalendarAdapter { selectedDate: LocalDate, clickToggle: Boolean, selectedEvent: Event
+                -> addBtnOrItemClicked(selectedDate, clickToggle, selectedEvent)
             }
         binding.calendarRecyclerView.adapter = adapter
         adapter.setList(days, hashMapDateEvent)
@@ -127,12 +125,12 @@ class MainActivity : AppCompatActivity(), DialogButtonListener {
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
-    override fun onSaveButtonClick(event: Event, saveOrUpdateToggle: Boolean) {
-        eventViewModel.saveOrUpdate(event,saveOrUpdateToggle)
+    override fun onSaveButtonClick(event: Event, actionToggle: Boolean) {
+        eventViewModel.saveOrUpdate(event,actionToggle)
     }
 
-    override fun onCancelButtonClick() {
-        TODO("Not yet implemented")
+    override fun onCancelButtonClick(event: Event, actionToggle: Boolean) {
+        eventViewModel.deleteOrCancel(event,actionToggle)
     }
 
 

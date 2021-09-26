@@ -14,6 +14,7 @@ import com.example.eventcalendar.databinding.DateCellBinding
 import com.example.eventcalendar.model.Event
 import kotlinx.android.synthetic.main.event_item.view.*
 import java.time.LocalDate
+import java.time.LocalDateTime
 
 
 class WeeklyCalendarAdapter(private val clickListener: (LocalDate, Boolean, Event) -> Unit) :
@@ -93,7 +94,8 @@ class WeeklyCalendarAdapter(private val clickListener: (LocalDate, Boolean, Even
                     })
                 } else
                     binding.btnAddEvent.setOnClickListener(View.OnClickListener {
-                        clickListener(date, addButtonToggle,dateWiseEvent!!)
+                        clickListener(date, addButtonToggle,Event(-1, LocalDate.MIN, LocalDateTime.MIN,
+                            LocalDateTime.MIN,"",""))
                     })
 
             }

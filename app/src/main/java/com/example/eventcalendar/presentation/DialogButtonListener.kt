@@ -8,5 +8,5 @@ interface DialogButtonListener {
 
 
         fun onSaveButtonClick(event: Event,actionToggle:Boolean)
-        fun onCancelButtonClick()
+        fun onCancelButtonClick(event: Event,actionToggle:Boolean)
 }

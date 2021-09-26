@@ -27,6 +27,12 @@ class EventViewModel(private val repo: EventRepo) : ViewModel() {
         }
     }
 
+    fun deleteOrCancel(event: Event, deleteOrCancelToggle: Boolean) {
+        if (!deleteOrCancelToggle){
+            delete(event)
+        }
+    }
+
     fun getDateWiseEventList(date: LocalDate): LiveData<List<Event>> {
         return repo.getEventsByDate(date)
     }
@@ -41,6 +47,13 @@ class EventViewModel(private val repo: EventRepo) : ViewModel() {
     private fun update(event: Event) {
         viewModelScope.launch {
             repo.update(event)
+        }
+
+    }
+
+    private fun delete(event: Event) {
+        viewModelScope.launch {
+            repo.delete(event)
         }
 
     }

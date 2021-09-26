@@ -92,7 +92,7 @@ class AddEventDialog(
             .setNegativeButton(
                 negativeButtonText,
                 DialogInterface.OnClickListener { dialog, which ->
-                    listener.get()?.onCancelButtonClick()
+                    listener.get()?.onCancelButtonClick(selectedEvent,addButtonTracker)
                 })
 
         builder.apply { setView(binding.root) }
