@@ -9,7 +9,8 @@
 
     <androidx.cardview.widget.CardView
         android:id="@+id/card_view"
-        android:layout_width="match_parent"
+        android:visibility="gone"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:clickable="true"
@@ -20,26 +21,25 @@
 
         <LinearLayout
             android:id="@+id/list_item_layout"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_margin="8dp"
+            android:layout_width="50dp"
+            android:layout_height="wrap_content"
             android:orientation="vertical">
 
             <TextView
                 android:id="@+id/title_text_view"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="10dp"
-                android:text="TextViewTitle"
-                android:textColor="@android:color/background_light"
-                android:textSize="15sp"
+                android:text="Title"
+                android:textColor="#040404"
+                android:textSize="10sp"
                 android:textStyle="bold" />
 
             <TextView
                 android:id="@+id/desc_text_view"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="10dp"
-                android:text="TextViewDesc"
+                android:text="Descrip"
                 android:textColor="@android:color/background_light"
                 android:textSize="12sp" />
         </LinearLayout>
