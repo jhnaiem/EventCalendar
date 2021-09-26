@@ -1,7 +1,6 @@
 package com.example.eventcalendar.model
 
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import java.time.LocalDate
 
 

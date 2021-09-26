@@ -3,6 +3,8 @@ package com.example.eventcalendar.model
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import androidx.room.TypeConverters
+import com.example.eventcalendar.presentation.utils.DateConverter
 import java.time.LocalDate
 import java.time.LocalDateTime
 
@@ -13,8 +15,8 @@ data class Event (
     @ColumnInfo(name = "id")
     var id: Int,
 
-    @ColumnInfo(name = "date")
-    var date: LocalDate,
+    @ColumnInfo(name = "event_date")
+    var eventDate: LocalDate,
 
     @ColumnInfo(name = "created_date_time")
     var createdDateTime: LocalDateTime,

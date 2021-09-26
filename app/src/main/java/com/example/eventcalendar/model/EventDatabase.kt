@@ -4,8 +4,11 @@ import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
+import androidx.room.TypeConverters
+import com.example.eventcalendar.presentation.utils.*
 
 @Database(entities = [Event::class], version = 1)
+@TypeConverters(LocalDateTimeConverter::class,LocalDateConverter::class)
 abstract class EventDatabase : RoomDatabase() {
 
     abstract val eventDao: EventDao
