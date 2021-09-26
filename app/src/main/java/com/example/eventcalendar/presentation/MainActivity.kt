@@ -6,28 +6,40 @@ import android.os.Bundle
 import android.view.View
 import androidx.annotation.RequiresApi
 import androidx.databinding.DataBindingUtil
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
 import com.example.eventcalendar.R
 import com.example.eventcalendar.presentation.utils.CalendarUtils
 import com.example.eventcalendar.presentation.utils.CalendarUtils.daysInWeekList
 import com.example.eventcalendar.presentation.utils.CalendarUtils.monthYearFromDate
 import com.example.eventcalendar.databinding.ActivityMainBinding
+import com.example.eventcalendar.model.Event
+import com.example.eventcalendar.model.EventDatabase
+import com.example.eventcalendar.model.EventRepo
 import com.example.eventcalendar.presentation.adapter.WeeklyCalendarAdapter
+import com.example.eventcalendar.presentation.viewModel.EventViewModel
+import com.example.eventcalendar.presentation.viewModel.ViewModelFactory
 import java.time.LocalDate
 import java.util.ArrayList
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(), DialogButtonListener {
 
     private lateinit var binding: ActivityMainBinding
     private lateinit var adapter: WeeklyCalendarAdapter
+    private lateinit var eventViewModel: EventViewModel
 
+    private var hashMapDateEvent: HashMap<LocalDate, Event> =
+        HashMap<LocalDate, Event>() //define empty hashmap
+    private var days: ArrayList<LocalDate> = ArrayList<LocalDate>()
 
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
-
-        initRecyclerView()
+        val dao = EventDatabase.getInstance(application).eventDao
+        val eventViewModelFactory = ViewModelFactory(EventRepo(dao))
+        eventViewModel = ViewModelProvider(this, eventViewModelFactory)[EventViewModel::class.java]
 
         binding.btnNext.setOnClickListener(View.OnClickListener {
             showNextWeek()
@@ -37,25 +49,41 @@ class MainActivity : AppCompatActivity() {
             showPrevWeek()
         })
 
+        days = daysInWeekList(CalendarUtils.selectedDate)
+        initRecyclerView()
+        getDateWiseEventList(days)
+
+        eventViewModel.events.observe(this, Observer {
+            getDateWiseEventList(days)
+        })
+
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
     private fun initRecyclerView() {
         binding.monthYearTV.text = monthYearFromDate(CalendarUtils.selectedDate)
-        val days: ArrayList<LocalDate> = daysInWeekList(CalendarUtils.selectedDate)
-
-        binding.calendarRecyclerView.layoutManager = GridLayoutManager(applicationContext,1,GridLayoutManager.HORIZONTAL,false)
-        adapter = WeeklyCalendarAdapter{ selectedItem: LocalDate ->
-            itemClicked(selectedItem)
-        }
+        binding.calendarRecyclerView.layoutManager =
+            GridLayoutManager(applicationContext, 1, GridLayoutManager.HORIZONTAL, false)
+        adapter =
+            WeeklyCalendarAdapter { selectedDate: LocalDate, clickToggle: Boolean, selectedEvent: Event
+                ->
+                addBtnOrItemClicked(selectedDate, clickToggle, selectedEvent)
+            }
         binding.calendarRecyclerView.adapter = adapter
-        adapter.setList(days)
+        adapter.setList(days, hashMapDateEvent)
 
     }
 
-    private fun itemClicked(selectedItem: LocalDate) {
-        val addEventDialog: AddEventDialog = AddEventDialog()
-        addEventDialog.show(supportFragmentManager,"TAG")
+    //To popup the dialog and add or update event
+    @RequiresApi(Build.VERSION_CODES.O)
+    private fun addBtnOrItemClicked(
+        selectedDate: LocalDate,
+        clickToggle: Boolean,
+        selectedEvent: Event
+    ) {
+        val addEventDialog = AddEventDialog(selectedDate, clickToggle, selectedEvent)
+        addEventDialog.show(supportFragmentManager, "TAG")
+        addEventDialog.observeClick(this)
     }
 
 
@@ -63,9 +91,10 @@ class MainActivity : AppCompatActivity() {
     fun showNextWeek() {
         CalendarUtils.selectedDate = CalendarUtils.selectedDate.plusWeeks(1)
         binding.monthYearTV.text = monthYearFromDate(CalendarUtils.selectedDate)
-        val days: ArrayList<LocalDate> = daysInWeekList(CalendarUtils.selectedDate)
-        adapter.setList(days)
-        adapter.notifyDataSetChanged()
+        days.clear()
+        hashMapDateEvent.clear()
+        days = daysInWeekList(CalendarUtils.selectedDate)
+        getDateWiseEventList(days)
 
 
     }
@@ -74,10 +103,37 @@ class MainActivity : AppCompatActivity() {
     fun showPrevWeek() {
         CalendarUtils.selectedDate = CalendarUtils.selectedDate.minusWeeks(1)
         binding.monthYearTV.text = monthYearFromDate(CalendarUtils.selectedDate)
-        val days: ArrayList<LocalDate> = daysInWeekList(CalendarUtils.selectedDate)
-        adapter.setList(days)
-        adapter.notifyDataSetChanged()
+        days.clear()
+        hashMapDateEvent.clear()
+        days = daysInWeekList(CalendarUtils.selectedDate)
+        getDateWiseEventList(days)
 
 
     }
+
+    private fun getDateWiseEventList(days: ArrayList<LocalDate>) {
+
+        for (day in days) {
+            eventViewModel.getDateWiseEventList(day).observe(this, Observer {
+                if (it.isNotEmpty()) {
+                    hashMapDateEvent.put(day, it[0])
+                    adapter.setList(days, hashMapDateEvent)
+                    adapter.notifyDataSetChanged()
+                }
+
+            })
+        }
+
+    }
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    override fun onSaveButtonClick(event: Event, saveOrUpdateToggle: Boolean) {
+        eventViewModel.saveOrUpdate(event,saveOrUpdateToggle)
+    }
+
+    override fun onCancelButtonClick() {
+        TODO("Not yet implemented")
+    }
+
+
 }

@@ -2,15 +2,11 @@ package com.example.eventcalendar.presentation.viewModel
 
 import android.os.Build
 import androidx.annotation.RequiresApi
-import androidx.databinding.Bindable
 import androidx.lifecycle.*
-import androidx.lifecycle.Observer
 import com.example.eventcalendar.model.Event
 import com.example.eventcalendar.model.EventRepo
 import kotlinx.coroutines.launch
 import java.time.LocalDate
-import java.time.LocalDateTime
-import java.util.*
 
 
 class EventViewModel(private val repo: EventRepo) : ViewModel() {
@@ -20,21 +16,14 @@ class EventViewModel(private val repo: EventRepo) : ViewModel() {
     val events = repo.events
 
 
-
-    val inputTitle = MutableLiveData<String?>()
-
-    val inputDesc = MutableLiveData<String?>()
-
-
     @RequiresApi(Build.VERSION_CODES.O)
-    fun saveOrUpdate(selectedDate: LocalDate) {
+    fun saveOrUpdate(event: Event, saveOrUpdateToggle: Boolean) {
 
-        if (isUpdateOrDelete) {
+        if (saveOrUpdateToggle) {
+            insert(event)
 
         } else {
-            val title: String = inputTitle.value!!
-            val desc: String = inputDesc.value!!
-            insert(Event(0,selectedDate, LocalDateTime.now(), LocalDateTime.now(), title, desc))
+            update(event)
         }
     }
 
@@ -45,6 +34,13 @@ class EventViewModel(private val repo: EventRepo) : ViewModel() {
     private fun insert(event: Event) {
         viewModelScope.launch {
             repo.insert(event)
+        }
+
+    }
+
+    private fun update(event: Event) {
+        viewModelScope.launch {
+            repo.update(event)
         }
 
     }
