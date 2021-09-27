@@ -42,7 +42,7 @@ events in a date box and decided to work on that later on after the submission.
 > Solved the issue by using coroutine. Used IO coroutine dispatcher to get the data from DB and then move to Main thread to notify the adapter with the help of the Main dispatcher.
 In the presentation layer, I also faced another issue with deleting an event. An event was getting deleted but not reflecting on the layout instantly. For that, I had to clear the dateEventHashmap before getting a new event list from the DB and notifying the adapter.
 
-  * Choosing data structure for storing date wise events:
+  * __Choosing data structure for storing date wise events__:
   I have chosen hashMap whose key is a date and value is a list of an event; though I am showing a 
   single event now, I'll implement showing multiple events in a date box. I have chosen it rather 
   than a class containing the date and list of an event because of its easy and faster-accessing capability.
