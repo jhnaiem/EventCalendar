@@ -114,6 +114,7 @@ class MainActivity : AppCompatActivity(), DialogButtonListener {
 
 
     private fun getDateWiseEventList(days: ArrayList<LocalDate>) {
+        hashMapDateEvent.clear()
         CoroutineScope(Dispatchers.IO).launch {
             for (day in days) {
                 val result = eventViewModel.getDateWiseEventList(day)

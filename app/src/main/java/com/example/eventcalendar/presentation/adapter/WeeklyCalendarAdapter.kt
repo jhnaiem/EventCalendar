@@ -43,10 +43,6 @@ class WeeklyCalendarAdapter(private val clickListener: (LocalDate, Boolean, Even
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
         holder.setIsRecyclable(false)
 
-
-//        if (hashMapDateEvent.get(daysList[position]) == null)
-//            holder.bind(daysList[position], event, clickListener)
-//        else
         holder.bind(daysList[position], hashMapDateEvent[daysList[position]], clickListener)
 
     }
@@ -89,7 +85,6 @@ class WeeklyCalendarAdapter(private val clickListener: (LocalDate, Boolean, Even
                     clickListener(date, addButtonToggle, dateWiseEvent)
                 })
             } else {
-                binding.parentView.card_view.visibility = View.GONE
                 binding.btnAddEvent.setOnClickListener(View.OnClickListener {
                     clickListener(
                         date, addButtonToggle, Event(
