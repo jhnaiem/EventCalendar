@@ -56,7 +56,6 @@ Libraries Used
   multidex and automated testing.
   * [AppCompat][1] - Degrade gracefully on older versions of Android.
   * [Android KTX][2] - Write more concise, idiomatic Kotlin code.
-  * [Test][4] - An Android testing framework for unit and runtime UI tests.
   * [Room][90] - The Room persistence library provides an abstraction layer over SQLite to allow fluent
     database access while harnessing the full power of SQLite.
     * [Data Binding][11] - Declaratively bind observable data to UI elements.
