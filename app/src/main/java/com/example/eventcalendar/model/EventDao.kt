@@ -21,5 +21,5 @@ interface EventDao {
     fun getAllEvents(): LiveData<List<Event>>
 
     @Query("SELECT * FROM event_data_table WHERE event_date IN (:date)")
-    fun getEventsByDate(date: LocalDate):LiveData<List<Event>>
+    suspend fun getEventsByDate(date: LocalDate):List<Event>
 }

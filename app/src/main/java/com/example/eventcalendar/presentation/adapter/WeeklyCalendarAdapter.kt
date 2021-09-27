@@ -41,15 +41,13 @@ class WeeklyCalendarAdapter(private val clickListener: (LocalDate, Boolean, Even
 
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
+        holder.setIsRecyclable(false)
 
-        if (hashMapDateEvent[daysList[position]] == null)
-            holder.bind(daysList[position], event, clickListener)
-        else
-            holder.bind(
-                daysList[position],
-                hashMapDateEvent[daysList[position]]!!, clickListener
-            )
 
+//        if (hashMapDateEvent.get(daysList[position]) == null)
+//            holder.bind(daysList[position], event, clickListener)
+//        else
+        holder.bind(daysList[position], hashMapDateEvent[daysList[position]], clickListener)
 
     }
 
@@ -78,30 +76,41 @@ class WeeklyCalendarAdapter(private val clickListener: (LocalDate, Boolean, Even
             dateWiseEvent: Event?,
             clickListener: (LocalDate, Boolean, Event) -> Unit
         ) {
-            if (date == null) {
-                binding.cellDayText.text = ""
+
+            binding.dayOfWeekText.text = date.dayOfWeek.toString().subSequence(0, 3)
+            binding.cellDayText.text = date.dayOfMonth.toString()
+            if (dateWiseEvent != null) {
+                addButtonToggle = false
+                binding.parentView.card_view.visibility = View.VISIBLE
+                binding.eventItemView.titleTextView.text = dateWiseEvent.title
+                binding.eventItemView.descTextView.text = dateWiseEvent.description
+                binding.btnAddEvent.visibility = View.GONE
+                binding.parentView.card_view.setOnClickListener(View.OnClickListener {
+                    clickListener(date, addButtonToggle, dateWiseEvent)
+                })
             } else {
-                binding.dayOfWeekText.text = date.dayOfWeek.toString().subSequence(0, 3)
-                binding.cellDayText.text = date.dayOfMonth.toString()
-                if (dateWiseEvent != null) {
-                    addButtonToggle = false
-                    binding.parentView.card_view.visibility = View.VISIBLE
-                    binding.eventItemView.titleTextView.text = dateWiseEvent.title
-                    binding.eventItemView.descTextView.text = dateWiseEvent.description
-                    binding.btnAddEvent.visibility = View.GONE
-                    binding.parentView.card_view.setOnClickListener(View.OnClickListener {
-                        clickListener(date, addButtonToggle, dateWiseEvent)
-                    })
-                } else
-                    binding.btnAddEvent.setOnClickListener(View.OnClickListener {
-                        clickListener(date, addButtonToggle,Event(-1, LocalDate.MIN, LocalDateTime.MIN,
-                            LocalDateTime.MIN,"",""))
-                    })
+                binding.parentView.card_view.visibility = View.GONE
+                binding.btnAddEvent.setOnClickListener(View.OnClickListener {
+                    clickListener(
+                        date, addButtonToggle, Event(
+                            -1, LocalDate.MIN, LocalDateTime.MIN,
+                            LocalDateTime.MIN, "", ""
+                        )
+                    )
+                })
 
             }
 
         }
 
-
     }
+
+    override fun getItemId(position: Int): Long {
+        return position.toLong()
+    }
+
+    override fun getItemViewType(position: Int): Int {
+        return position
+    }
+
 }

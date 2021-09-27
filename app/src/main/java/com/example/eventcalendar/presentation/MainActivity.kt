@@ -20,6 +20,10 @@ import com.example.eventcalendar.model.EventRepo
 import com.example.eventcalendar.presentation.adapter.WeeklyCalendarAdapter
 import com.example.eventcalendar.presentation.viewModel.EventViewModel
 import com.example.eventcalendar.presentation.viewModel.ViewModelFactory
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.time.LocalDate
 import java.util.ArrayList
 
@@ -64,8 +68,10 @@ class MainActivity : AppCompatActivity(), DialogButtonListener {
         binding.monthYearTV.text = monthYearFromDate(CalendarUtils.selectedDate)
         binding.calendarRecyclerView.layoutManager =
             GridLayoutManager(applicationContext, 1, GridLayoutManager.HORIZONTAL, false)
-        adapter = WeeklyCalendarAdapter { selectedDate: LocalDate, clickToggle: Boolean, selectedEvent: Event
-                -> addBtnOrItemClicked(selectedDate, clickToggle, selectedEvent)
+        adapter =
+            WeeklyCalendarAdapter { selectedDate: LocalDate, clickToggle: Boolean, selectedEvent: Event
+                ->
+                addBtnOrItemClicked(selectedDate, clickToggle, selectedEvent)
             }
         binding.calendarRecyclerView.adapter = adapter
         adapter.setList(days, hashMapDateEvent)
@@ -89,11 +95,8 @@ class MainActivity : AppCompatActivity(), DialogButtonListener {
     fun showNextWeek() {
         CalendarUtils.selectedDate = CalendarUtils.selectedDate.plusWeeks(1)
         binding.monthYearTV.text = monthYearFromDate(CalendarUtils.selectedDate)
-        days.clear()
-        hashMapDateEvent.clear()
         days = daysInWeekList(CalendarUtils.selectedDate)
         getDateWiseEventList(days)
-
 
     }
 
@@ -109,28 +112,31 @@ class MainActivity : AppCompatActivity(), DialogButtonListener {
 
     }
 
+
     private fun getDateWiseEventList(days: ArrayList<LocalDate>) {
-
-        for (day in days) {
-            eventViewModel.getDateWiseEventList(day).observe(this, Observer {
-                if (it.isNotEmpty()) {
-                    hashMapDateEvent.put(day, it[0])
-                    adapter.setList(days, hashMapDateEvent)
-                    adapter.notifyDataSetChanged()
+        CoroutineScope(Dispatchers.IO).launch {
+            for (day in days) {
+                val result = eventViewModel.getDateWiseEventList(day)
+                if (result.isNotEmpty()) {
+                    hashMapDateEvent.put(day, result[0])
                 }
+            }
 
-            })
+            withContext(Dispatchers.Main) {
+                adapter.setList(days, hashMapDateEvent)
+                adapter.notifyDataSetChanged()
+            }
         }
-
     }
+
 
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onSaveButtonClick(event: Event, actionToggle: Boolean) {
-        eventViewModel.saveOrUpdate(event,actionToggle)
+        eventViewModel.saveOrUpdate(event, actionToggle)
     }
 
     override fun onCancelButtonClick(event: Event, actionToggle: Boolean) {
-        eventViewModel.deleteOrCancel(event,actionToggle)
+        eventViewModel.deleteOrCancel(event, actionToggle)
     }
 
 

@@ -21,7 +21,7 @@ class EventRepo(private val dao: EventDao) {
         dao.deleteEvent(event)
     }
 
-    fun getEventsByDate(date: LocalDate): LiveData<List<Event>> {
+    suspend fun getEventsByDate(date: LocalDate): List<Event> {
         return dao.getEventsByDate(date)
     }
 }
