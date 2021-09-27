@@ -1,12 +1,9 @@
-package com.example.eventcalendar.presentation.utils;
+package com.example.eventcalendar.model.utils;
 
 import android.os.Build;
 
 import androidx.annotation.RequiresApi;
 import androidx.room.TypeConverter;
-
-import java.sql.Date;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 

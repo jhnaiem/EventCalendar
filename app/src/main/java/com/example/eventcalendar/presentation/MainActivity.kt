@@ -21,7 +21,8 @@ import com.example.eventcalendar.presentation.adapter.WeeklyCalendarAdapter
 import com.example.eventcalendar.presentation.viewModel.EventViewModel
 import com.example.eventcalendar.presentation.viewModel.ViewModelFactory
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Dispatchers.IO
+import kotlinx.coroutines.Dispatchers.Main
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.time.LocalDate
@@ -71,7 +72,7 @@ class MainActivity : AppCompatActivity(), DialogButtonListener {
         adapter =
             WeeklyCalendarAdapter { selectedDate: LocalDate, clickToggle: Boolean, selectedEvent: Event
                 ->
-                addBtnOrItemClicked(selectedDate, clickToggle, selectedEvent)
+                addButtonOrItemClicked(selectedDate, clickToggle, selectedEvent)
             }
         binding.calendarRecyclerView.adapter = adapter
         adapter.setList(days, hashMapDateEvent)
@@ -80,7 +81,7 @@ class MainActivity : AppCompatActivity(), DialogButtonListener {
 
     //To popup the dialog and add or update event
     @RequiresApi(Build.VERSION_CODES.O)
-    private fun addBtnOrItemClicked(
+    private fun addButtonOrItemClicked(
         selectedDate: LocalDate,
         clickToggle: Boolean,
         selectedEvent: Event
@@ -113,9 +114,10 @@ class MainActivity : AppCompatActivity(), DialogButtonListener {
     }
 
 
+    //To get day wise event and put that in the hashmap
     private fun getDateWiseEventList(days: ArrayList<LocalDate>) {
         hashMapDateEvent.clear()
-        CoroutineScope(Dispatchers.IO).launch {
+        CoroutineScope(IO).launch {
             for (day in days) {
                 val result = eventViewModel.getDateWiseEventList(day)
                 if (result.isNotEmpty()) {
@@ -123,7 +125,7 @@ class MainActivity : AppCompatActivity(), DialogButtonListener {
                 }
             }
 
-            withContext(Dispatchers.Main) {
+            withContext(Main) {
                 adapter.setList(days, hashMapDateEvent)
                 adapter.notifyDataSetChanged()
             }

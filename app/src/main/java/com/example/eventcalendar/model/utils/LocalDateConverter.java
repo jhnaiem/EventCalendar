@@ -1,4 +1,4 @@
-package com.example.eventcalendar.presentation.utils;
+package com.example.eventcalendar.model.utils;
 
 import android.os.Build;
 

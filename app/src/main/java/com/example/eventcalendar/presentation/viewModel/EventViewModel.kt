@@ -11,8 +11,6 @@ import java.time.LocalDate
 
 class EventViewModel(private val repo: EventRepo) : ViewModel() {
 
-    private lateinit var eventToUpdateOrDelete: Event
-    private var isUpdateOrDelete = false
     val events = repo.events
 
 
@@ -20,16 +18,16 @@ class EventViewModel(private val repo: EventRepo) : ViewModel() {
     fun saveOrUpdate(event: Event, saveOrUpdateToggle: Boolean) {
 
         if (saveOrUpdateToggle) {
-            insert(event)
+            insertEvent(event)
 
         } else {
-            update(event)
+            updateEvent(event)
         }
     }
 
     fun deleteOrCancel(event: Event, deleteOrCancelToggle: Boolean) {
         if (!deleteOrCancelToggle) {
-            delete(event)
+            deleteEvent(event)
         }
     }
 
@@ -37,21 +35,21 @@ class EventViewModel(private val repo: EventRepo) : ViewModel() {
         return repo.getEventsByDate(date)
     }
 
-    private fun insert(event: Event) {
+    private fun insertEvent(event: Event) {
         viewModelScope.launch {
             repo.insert(event)
         }
 
     }
 
-    private fun update(event: Event) {
+    private fun updateEvent(event: Event) {
         viewModelScope.launch {
             repo.update(event)
         }
 
     }
 
-    private fun delete(event: Event) {
+    private fun deleteEvent(event: Event) {
         viewModelScope.launch {
             repo.delete(event)
         }

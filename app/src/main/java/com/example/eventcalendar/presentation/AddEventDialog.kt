@@ -22,7 +22,7 @@ import java.time.LocalDateTime
 class AddEventDialog(
     private val selectedDate: LocalDate,
     private val addButtonTracker: Boolean,
-    val selectedEvent: Event
+    private val selectedEvent: Event
 ) : AppCompatDialogFragment() {
 
     var listener = WeakReference<DialogButtonListener>(null)
