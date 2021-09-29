@@ -10,7 +10,6 @@ import java.time.LocalDate
 
 
 class EventViewModel(private val repo: EventRepo) : ViewModel() {
-
     val events = repo.events
 
 
