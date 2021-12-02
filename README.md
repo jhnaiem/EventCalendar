@@ -1,33 +1,6 @@
 # EventCalendar
 A weekly event calender following MVVM with Android Jetpack.
 
-## Thought process
----
-Firstly, I started by asking myself and answering some questions, where to start, what will be the 
-features? how is it different from a regular monthly calendar? , how much knowledge do I have with 
-the Necessary Technologies mentioned?
-
-After that, I started developing just a simple weekly calendar using Sunday as the start date of a 
-week, and I was able to do that with ease. Then comes the part of showing an event in a date box . 
-For that, I started with creating the model layer.
-
-* __Model layer__:  I added the model layer with creating model class, Dao, Database, Repository. 
-  After initial implementation, I had to work on them later for adding a new query, column.
-  Difficulty faced: With inserting LocalDateTime and LocalDate used converters for tat.
-
-After that, I moved to the presentation layer. Then a question arose about showing an event in a 
-date box, and that was "should I give the user to add multiple events or just a single event in a 
-date box?". I also tried to contact the team through email but got no response so I went with showing 
-multiple events in a single date box. I decider to use recycler view inside another recycler view of
-a weekly calendar. I created a ViewModel to communicate with the data layer. I created the necessary
-classes and layouts. Then comes the interesting part that is communicating with the data layer and 
-updating the views. As I haven't used recycler view inside another recycler view before,  for that, 
-I have to research. I planned when the parent adapter would bind it's views, it would also notify 
-the child adapter with the updates. Then I added a dialog fragment to take user input.  I was close 
-to the implementation but got a problem with notifying the child adapter. Then I got a reply from the 
-team about showing a single event in a date box. So I created another branch for the part with multiple 
-events in a date box and decided to work on that later on after the submission.
-
 * __Presentation layer__:  
 
 * __Dialog to take User input__: I added a dialog fragment to take user input. I managed button text
